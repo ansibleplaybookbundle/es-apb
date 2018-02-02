@@ -27,3 +27,8 @@ In order for the `ServiceAccount` used by the APB during provisioning to be able
       sandbox_role: "admin"
       namespace: ansible-service-broker
 ```
+
+## Host Requirements
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
+sudo sysctl -w vm.max_map_count=262144
