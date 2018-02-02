@@ -1,0 +1,69 @@
+---
+version: 1.0
+name: es-apb
+description: APB to deploy cluster-ready Elasticsearch 6.1.2
+bindable: True
+async: optional
+metadata:
+  displayName: "Elasticsearch (APB)"
+  imageUrl: https://www.elastic.co/assets/blt9a26f88bfbd20eb5/icon-elasticsearch-bb.svg
+  documentationUrl: https://www.elastic.co/guide/en/elasticsearch/reference/6.1/index.html
+  providerDisplayName: "Red Hat, Inc."
+tags:
+  - elasticsearch
+plans:
+  - name: ephemeral
+    description: This plan deploys Elasticsearch using ephemeral storage
+    free: True
+    metadata:
+      displayName: Ephemeral installation
+    default: True
+    parameters:
+    - name: APPLICATION_NAME
+      type: string
+      default: elasticsearch
+      description: Name given to the Elasticsearch cluster
+      title: Cluster name
+      required: true
+    - name: CLUSTER_SIZE
+      type: int
+      default: 1
+      description: Number of Elasticsearch instances that the cluster will consist of
+      title: Cluster size
+      required: true
+    - name: ES_MEMORY_LIMIT
+      type: string
+      default: 512Mi
+      description: Memory limit for Elasticsearch container
+      title: Memory limit
+      required: true
+  - name: persistent
+    description: This plan deploys Elasticsearch using ephemeral storage
+    free: True
+    metadata:
+      displayName: Persistent installation
+    parameters:
+    - name: APPLICATION_NAME
+      type: string
+      default: elasticsearch
+      description: Name given to the Elasticsearch cluster
+      title: Cluster name
+      required: true
+    - name: CLUSTER_SIZE
+      type: int
+      default: 1
+      description: Number of Elasticsearch instances that the cluster will consist of
+      title: Cluster size
+      required: true
+    - name: ES_MEMORY_LIMIT
+      type: string
+      default: 512Mi
+      description: Memory limit for Elasticsearch container
+      title: Memory limit
+      required: true
+    - name: ES_PVC_SIZE
+      type: string
+      default: 1Gi
+      description: Elasticsearch storage size
+      title: Elasticsearch storage
+      required: true

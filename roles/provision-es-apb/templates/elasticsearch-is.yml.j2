@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: {{ APPLICATION_NAME }}
+  name: {{ APPLICATION_NAME }}
+  namespace: {{ namespace }}
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - name: {{ elasticsearch_version }}
+    from:
+      kind: DockerImage
+      name: ruromero/openshift-elasticsearch:{{ elasticsearch_version }}
