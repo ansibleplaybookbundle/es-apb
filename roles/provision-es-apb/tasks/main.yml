@@ -5,9 +5,6 @@
     dest: "/tmp/elasticsearch-is.yml"
   register: is
 
-- debug:
-    var: is
-
 - name: Create ImageStream
   openshift_v1_image_stream:
     name: "{{ APPLICATION_NAME }}"
