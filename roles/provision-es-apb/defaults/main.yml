@@ -1,5 +1,5 @@
 ---
-elasticsearch_version: 6.1.2
-elasticsearch_apb_cluster_size: "{{ CLUSTER_SIZE | default('1') }}"
+elasticsearch_image_name: registry.centos.org/rhsyseng/elasticsearch
+elasticsearch_apb_cluster_size: "{{ cluster_size | default('1') }}"
 elasticsearch_apb_minimum_master_nodes: "{{ 1 + ((elasticsearch_apb_cluster_size | int) / 2) | round | int }}"
-elasticsearch_apb_pvc_size: "{{ ES_PVC_SIZE | default('100Mi') }}"
+elasticsearch_apb_pvc_size: "{{ es_pvc_size | default('100Mi') }}"

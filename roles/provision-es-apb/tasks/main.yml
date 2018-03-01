@@ -1,42 +1,47 @@
 ---
+- name: "[SET UP] tmp folder"
+  file:
+    path: /tmp/elasticsearch
+    state: directory
+
 - name: Process ImageStream from template
   template:
     src: elasticsearch-is.yml.j2
-    dest: "/tmp/elasticsearch-is.yml"
+    dest: "/tmp/elasticsearch/elasticsearch-is.yml"
   register: is
 
 - name: Create ImageStream
   openshift_v1_image_stream:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     state: present
     src: "{{ is.dest | default(is.path) }}"
 
 - name: Create ServiceAccount
   k8s_v1_service_account:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     state: present
 
 - name: Create RoleBinding
   k8s_v1beta1_role_binding:
-    name: "{{ APPLICATION_NAME }}-view"
+    name: "{{ application_name }}-view"
     namespace: "{{ namespace }}"
     state: present
     role_ref_name: view
     role_ref_kind: ClusterRole
     subjects:
     - kind: ServiceAccount
-      name: "{{ APPLICATION_NAME }}"
+      name: "{{ application_name }}"
       namespace: "{{ namespace }}"
 
 - name: Create API service
   k8s_v1_service:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     state: present
     selector:
-      app: "{{ APPLICATION_NAME }}"
+      app: "{{ application_name }}"
     ports:
       - name: restapi
         port: 9200
@@ -44,38 +49,25 @@
 
 - name: Create Cluster service
   k8s_v1_service:
-    name: "{{ APPLICATION_NAME }}-cluster"
+    name: "{{ application_name }}-cluster"
     namespace: "{{ namespace }}"
     state: present
     selector:
-      app: "{{ APPLICATION_NAME }}"
+      app: "{{ application_name }}"
     ports:
       - name: cluster
         port: 9300
         target_port: 9300
 
-- name: Process ConfigMap from template
-  template:
-    src: elasticsearch-configmap.yml.j2
-    dest: "/tmp/elasticsearch-configmap.yml"
-  register: cm
-
-- name: Create ConfigMap
-  k8s_v1_config_map:
-    name: "{{ APPLICATION_NAME }}"
-    namespace: "{{ namespace}}"
-    state: present
-    src: "{{ cm.dest | default(cm.path) }}"
-
 - name: Process StatefulSet from template
   template:
     src: elasticsearch-statefulset.yml.j2
-    dest: "/tmp/elasticsearch-statefulset.yml"
+    dest: "/tmp/elasticsearch/elasticsearch-statefulset.yml"
   register: statefulset
 
 - name: Create StatefulSet
   k8s_v1beta1_stateful_set:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace}}"
     state: present
     src: "{{ statefulset.dest | default(statefulset.path) }}"
@@ -89,4 +81,4 @@
 - name: encode bind credentials
   asb_encode_binding:
     fields:
-      ELASTICSEARCH_URL: 'http://{{ APPLICATION_NAME }}:9200'
+      ELASTICSEARCH_URL: 'http://{{ application_name }}:9200'

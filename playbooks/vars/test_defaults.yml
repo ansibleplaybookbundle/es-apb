@@ -1,0 +1,4 @@
+---
+es_memory_limit: 512Mi
+cluster_size: 1
+es_version: 6.2.1
