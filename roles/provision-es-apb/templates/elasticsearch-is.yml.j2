@@ -2,14 +2,14 @@ apiVersion: v1
 kind: ImageStream
 metadata:
   labels:
-    app: {{ APPLICATION_NAME }}
-  name: {{ APPLICATION_NAME }}
+    app: {{ application_name }}
+  name: {{ application_name }}
   namespace: {{ namespace }}
 spec:
   lookupPolicy:
     local: false
   tags:
-  - name: {{ elasticsearch_version }}
+  - name: {{ es_version }}
     from:
       kind: DockerImage
-      name: registry.centos.org/rhsyseng/kibana:{{ elasticsearch_version }}
+      name: {{ elasticsearch_image_name }}:{{ es_version }}

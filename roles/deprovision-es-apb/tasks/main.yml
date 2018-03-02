@@ -1,42 +1,49 @@
 ---
 - name: Delete ServiceAccount
   k8s_v1_service_account:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     state: absent
 
 - name: Delete RoleBinding
   k8s_v1beta1_role_binding:
-    name: "{{ APPLICATION_NAME }}-view"
+    name: "{{ application_name }}-view"
     namespace: "{{ namespace }}"
     state: absent
 
 - name: Delete API service
   k8s_v1_service:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     state: absent
 
 - name: Delete Cluster service
   k8s_v1_service:
-    name: "{{ APPLICATION_NAME }}-cluster"
+    name: "{{ application_name }}-cluster"
     namespace: "{{ namespace }}"
     state: absent
 
 - name: Delete ConfigMap
   k8s_v1_config_map:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace}}"
     state: absent
 
 - name: Delete StatefulSet
   k8s_v1beta1_stateful_set:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace}}"
     state: absent
 
+- name: Delete StatefulSet's PVCs
+  k8s_v1_persistent_volume_claim:
+    name: "elasticsearch-persistent-{{ application_name }}-{{ item }}"
+    namespace: "{{ namespace}}"
+    state: absent
+  with_sequence: start=0 end="{{ cluster_size - 1}}"
+
 - name: Delete ImageStream
   openshift_v1_image_stream:
-    name: "{{ APPLICATION_NAME }}"
+    name: "{{ application_name }}"
     namespace: "{{ namespace}}"
     state: absent

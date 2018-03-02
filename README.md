@@ -1,6 +1,10 @@
 # Elasticsearch APB
 
-This [Ansible Playbook Bundle](https://github.com/ansibleplaybookbundle/ansible-playbook-bundle) deploys Elasticsearch 6.1.2 with the elasticsearch-cloud-kubernetes plugin for discovery. The deployment is done through StatefulSet.
+[![Build Status](https://travis-ci.org/ansibleplaybookbundle/es-apb.svg?branch=master)](https://travis-ci.org/ansibleplaybookbundle/es-apb) [![License](https://img.shields.io/:license-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
+![elasticsearch image](./docs/imgs/elasticsearch_logo.jpg)
+
+This [Ansible Playbook Bundle](https://github.com/ansibleplaybookbundle/ansible-playbook-bundle) deploys Elasticsearch with the elasticsearch-cloud-kubernetes plugin for discovery. The deployment is done through StatefulSet.
 
 Two plans have been defined:
 * **Ephemeral** where there won't be any persistence and the Elascticsearch data will be lost upon restarts
@@ -8,10 +12,11 @@ Two plans have been defined:
 
 ## Configuration
 
-* **CLUSTER_SIZE**: Number of Elasticsearch instances that will be deployed. Default `1`
-* **APPLICATION_NAME**: Name of the Elasticsearch cluster that will give name also to all the objects deployed. Default `elasticsearch`
-* **ES_MEMORY_LIMIT**: Memory limits to be set to the `elasticsearch` container. The half will be assigned to the Elasticsearch heap. Default `512Mi`
-* **ES_PVC_SIZE**: Size of each Persistent Volume Claim that will be defined. Default `1Gi` (Only for the persistent plan)
+* **cluster_size**: Number of Elasticsearch instances that will be deployed. Default `1`
+* **application_name**: Name of the Elasticsearch cluster that will give name also to all the objects deployed. Default `elasticsearch`
+* **es_memory_limit**: Memory limits to be set to the `elasticsearch` container. The half will be assigned to the Elasticsearch heap. Default `512Mi`
+* **es_pvc_size**: Size of each Persistent Volume Claim that will be defined. Default `1Gi` (Only for the persistent plan)
+* **es_version**: Dropdown to select the Elasticsearch version to deploy
 
 ## Ansible Service Broker - Requirements
 

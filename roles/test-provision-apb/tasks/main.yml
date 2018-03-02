@@ -1,0 +1,53 @@
+---
+- name: Retrieve Elasticsearch DeploymentConfig
+  k8s_v1beta1_stateful_set:
+    name: '{{ application_name }}'
+    namespace: '{{ namespace }}'
+  register: es_sts
+  retries: 5
+  delay: 10
+
+- name: Check Elasticsearch is ready
+  asb_save_test_result:
+    fail: true
+    msg: "Elasticsearch doesn't seem to be ready"
+  when:
+    - es_sts.stateful_set.status.ready_replicas != cluster_size
+    - travis is undefined
+
+- name: "Retrieve Service"
+  k8s_v1_service:
+    name: '{{ application_name }}'
+    namespace: '{{ namespace }}'
+  register: es_service_raw
+
+- name: Fetch endpoint from service
+  set_fact:
+    test_es_uri: 'http://{{ es_service_raw.service.spec.cluster_ip }}:{{ es_service_raw.service.spec.ports[0].port}}'
+
+- name: Check Elasticsearch cluster has all the nodes discovered
+  uri:
+    url: '{{ test_es_uri }}/_cluster/health'
+    method: GET
+    status_code: 200
+    return_content: yes
+  register: es_health
+  retries: 10
+  delay: 5
+  until:
+    - es_health.status == 200
+    - es_health.json.status == 'green'
+
+- asb_save_test_result:
+    fail: true
+    msg: "ES is not healthy"
+  when:
+    - es_health.json.status != 'green'
+    - travis is not defined
+
+- asb_save_test_result:
+    fail: true
+    msg: "ES cluster does not have the desired size"
+  when:
+    - es_health.json.number_of_nodes != cluster_size
+    - travis is not defined
