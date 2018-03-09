@@ -5,18 +5,18 @@ _bind_params: &_bind_params
   - name: es_url_name
     default: ELASTICSEARCH_URL
     display_group: Binding
-    required: "True"
+    required: True
     title: Elasticsearch environment variable name
     description: Name of the environmental variable that will refer to the Elasticsearch URL. Only when using asyncrhonous binding.
     type: string
 version: 1.0
 name: es-apb
 description: APB to deploy cluster-ready Elasticsearch
-bindable: "True"
+bindable: True
 async: optional
 metadata:
   displayName: "Elasticsearch (APB)"
-  imageUrl: https://github.com/ansibleplaybookbundle/es-apb/raw/master/docs/imgs/icon-elasticsearch-bb.svg
+  imageUrl: https://github.com/ansibleplaybookbundle/es-apb/raw/master/docs/imgs/elasticsearch_logo.jpg
   documentationUrl: https://www.elastic.co/guide/en/elasticsearch/reference/6.2/index.html
   providerDisplayName: "Red Hat, Inc."
 tags:
@@ -24,10 +24,10 @@ tags:
 plans:
   - name: ephemeral
     description: This plan deploys Elasticsearch using ephemeral storage
-    free: "True"
+    free: True
     metadata:
       displayName: Ephemeral installation
-    default: "True"
+    default: True
     parameters:
       - name: application_name
         type: string
@@ -49,14 +49,14 @@ plans:
         required: true
       - name: es_version
         title: Version
-        require: true
+        required: true
         default: 6.2.1
         type: enum
         enum: ["6.2.1", "6.1.2", "5.5.2"]
     bind_parameters: *_bind_params
   - name: persistent
     description: This plan deploys Elasticsearch using ephemeral storage
-    free: "True"
+    free: True
     metadata:
       displayName: Persistent installation
     parameters:
@@ -80,7 +80,7 @@ plans:
         required: true
       - name: es_version
         title: Version
-        require: true
+        required: true
         default: 6.2.1
         type: enum
         enum: ["6.2.1", "6.1.2", "5.5.2"]

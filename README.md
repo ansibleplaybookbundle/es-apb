@@ -33,6 +33,9 @@ In order for the `ServiceAccount` used by the APB during provisioning to be able
       namespace: ansible-service-broker
 ```
 
+**NOTE**: Make sure your Ansible Service Broker is running with the property `launch_apb_on_bind: true` if you want to be able to customize the environment variable
+dynamically during bind
+
 ## Host Requirements
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
