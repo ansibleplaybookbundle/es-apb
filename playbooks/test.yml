@@ -1,5 +1,5 @@
 ---
-- name: Test keycloak-apb
+- name: Test es-apb
   hosts: localhost
   gather_facts: false
   connection: local
