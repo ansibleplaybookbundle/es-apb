@@ -54,7 +54,7 @@
       kind: Service
       apiVersion: v1
       metadata:
-        name: "{{ application_name }}"
+        name: "{{ application_name }}-cluster"
         namespace: "{{ namespace }}"
       spec:
         selector:
