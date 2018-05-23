@@ -64,12 +64,6 @@
             port: 9300
             target_port: 9300
 
-- name: Process StatefulSet from template
-  template:
-    src: elasticsearch-statefulset.yml.j2
-    dest: "/tmp/elasticsearch/elasticsearch-statefulset.yml"
-  register: statefulset
-
 - name: Create StatefulSet
   k8s:
     state: present
