@@ -6,4 +6,5 @@
   - role: ansibleplaybookbundle.asb-modules
   tasks:
   - import_role:
-      name: deprovision-es-apb
+      name: es-apb
+      tasks_from: deprovision
