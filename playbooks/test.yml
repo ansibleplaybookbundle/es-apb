@@ -6,21 +6,17 @@
   vars_files:
   - vars/common.yml
   roles:
-  - role: ansible.kubernetes-modules
-    install_python_requirements: no
-    playbook_debug: true
   - role: ansibleplaybookbundle.asb-modules
-
-  post_tasks:
-    - name: "[TESTS] Start tests"
-      include_tasks: test_plan.yml
-      with_items:
-        - persistent
-        - ephemeral
-        - ha
-      loop_control:
-        loop_var: plan_id
-    - name: "[TEST][ALL] Success"
-      asb_save_test_result:
-        msg: 'All tests passed!'
-      when: travis is undefined
+  tasks:
+  - name: "[TESTS] Start tests"
+    include_tasks: test_plan.yml
+    with_items:
+      - persistent
+      - ephemeral
+      - ha
+    loop_control:
+      loop_var: plan_id
+  - name: "[TEST][ALL] Success"
+    asb_save_test_result:
+      msg: 'All tests passed!'
+    when: travis is undefined

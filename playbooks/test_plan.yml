@@ -6,32 +6,37 @@
     - test_{{ plan_id }}_defaults.yml
 
 - name: "[TESTS][{{ plan_id | upper }}] Create project for namespace"
-  openshift_v1_project:
+  k8s:
+    state: present
+    kind: Project
+    api_version: project.openshift.io/v1
     name: '{{ namespace }}'
 
 - name: "[TESTS][{{ plan_id | upper }}] Run the provision role."
-  include_role:
-    name: provision-es-apb
+  import_role:
+    name: es-apb
+    tasks_from: provision
+    defaults_from: provision
 
 - name: "[TESTS][{{ plan_id | upper }}] Run the test role."
-  include_role:
-    name: test-provision-apb
+  import_role:
+    name: es-apb
+    tasks_from: test-provision
 
 - name: "[TESTS][{{ plan_id | upper }}] Run the deprovision role."
-  include_role:
-    name: deprovision-es-apb
+  import_role:
+    name: es-apb
+    tasks_from: deprovision
 
 - name: "[TESTS][{{ plan_id | upper }}] Run the deprovision test role."
-  include_role:
-    name: test-deprovision-apb
+  import_role:
+    name: es-apb
+    tasks_from: test-deprovision
 
 - name: "[TESTS][{{ plan_id | upper }}] Remove binding secret."
-  k8s_v1_secret:
+  k8s:
+    state: absent
+    kind: Secret
+    api_version: v1
     name: "{{ lookup('env', 'POD_NAME') }}"
     namespace: '{{ namespace }}'
-    state: absent
-
-- name: "[TESTS][{{ plan_id | upper }}] Cleanup tmp folder."
-  file:
-    path: /tmp/elasticsearch
-    state: absent
