@@ -1,29 +1,20 @@
 ---
-- name: Retrieve Elasticsearch DeploymentConfig
-  k8s_v1beta1_stateful_set:
-    name: '{{ application_name }}'
-    namespace: '{{ namespace }}'
-  register: es_sts
-  retries: 5
-  delay: 10
 
 - name: Check Elasticsearch is ready
   asb_save_test_result:
     fail: true
     msg: "Elasticsearch doesn't seem to be ready"
   when:
-    - es_sts.stateful_set.status.ready_replicas != cluster_size
+    - es_sts.status.readyReplicas != cluster_size
     - travis is undefined
-
-- name: "Retrieve Service"
-  k8s_v1_service:
-    name: '{{ application_name }}'
-    namespace: '{{ namespace }}'
-  register: es_service_raw
+  vars:
+    es_sts: '{{ lookup("k8s", kind="StatefulSet", api_version="apps/v1", resource_name=application_name, namespace=namespace) }}'
 
 - name: Fetch endpoint from service
   set_fact:
-    test_es_uri: 'http://{{ es_service_raw.service.spec.cluster_ip }}:{{ es_service_raw.service.spec.ports[0].port}}'
+    test_es_uri: 'http://{{ es_service.spec.clusterIP }}:{{ es_service.spec.ports.0.port}}'
+  vars:
+    es_service: '{{ lookup("k8s", kind="Service", api_version="v1", resource_name=application_name, namespace=namespace) }}'
 
 - name: Check Elasticsearch cluster has all the nodes discovered
   uri:
