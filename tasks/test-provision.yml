@@ -5,7 +5,7 @@
     fail: true
     msg: "Elasticsearch doesn't seem to be ready"
   when:
-    - es_sts.status.readyReplicas != cluster_size
+    - es_sts.status.get("readyReplicas") != cluster_size
     - travis is undefined
   vars:
     es_sts: '{{ lookup("k8s", kind="StatefulSet", api_version="apps/v1", resource_name=application_name, namespace=namespace) }}'
