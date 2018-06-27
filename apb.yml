@@ -9,7 +9,7 @@ _bind_params: &_bind_params
     title: Elasticsearch environment variable name
     description: Name of the environmental variable that will refer to the Elasticsearch URL. Only when using asyncrhonous binding.
     type: string
-version: 1.0
+version: 1.0.0
 name: es-apb
 description: APB to deploy cluster-ready Elasticsearch
 bindable: True
